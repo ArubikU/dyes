@@ -1,0 +1,18 @@
+config:
+   gui: true
+   CMD: 10001
+   MATERIAL: LEATHER_HORSE_ARMOR
+   BORDER-MATERIAL: STONE
+   BORDER-NAME: BORDER
+   BORDER-CMD: 0
+   NEXT-MATERIAL: REDSTONE_BLOCK
+   NEXT-NAME: NEXT
+   NEXT-CMD: 0
+   PREV-MATERIAL: EMERALD_BLOCK
+   PREV-NAME: PREV
+   PREV-CMD: 0
+colors:
+   red:
+      display-name: "Rojo"
+      color: 255 0 255
+      

@@ -1,0 +1,8 @@
+main: rubrub07.dyes.dyes
+version: 1.0
+author: rubrub07
+api-version: 1.13
+name: Dyes
+commands:
+      dyes:
+         description: general command for dyes
