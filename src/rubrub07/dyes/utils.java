@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,9 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+
 public class utils {
 
-	static Set<String> codes = colorform.codes();
 	static List<String> cda = colorform.codesl();
 	
 	public static FileConfiguration lang() {
@@ -30,10 +32,28 @@ public class utils {
 		
 	}
 	
+	
 	public static void openInventoryOne(Player p) {
 		cda = colorform.codesl();
-		codes = colorform.codes();
-		Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 1");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 1"+suffix);
 		for(int i=0; i<9; i++) {
 			normal.setItem(i, colorform.Panel());
 		}
@@ -52,10 +72,10 @@ public class utils {
 		}
 		
 		if(cda.size() > 28) {
-			normal.setItem(54, colorform.Next());
+			normal.setItem(53, colorform.Next());
 		}
 		
-		for(int i= 10; i<43; i++) {
+		for(int i= 10; i<44; i++) {
 				if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
 					continue;
 				}
@@ -70,7 +90,7 @@ public class utils {
 				break;
 			}
 			
-			normal.setItem(i, colorform.generateColorDisplay(cda.get(0)));
+			normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
 			cda.remove(0);
 		}
 		p.openInventory(normal);
@@ -78,8 +98,25 @@ public class utils {
 
     public static void openInventoryTwo(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-     	Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 2");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 2"+suffix);
      	
      	for(int i=0; i<9; i++) {
      		normal.setItem(i, colorform.Panel());
@@ -99,37 +136,55 @@ public class utils {
      	}
      	
      	if(cda.size() > 56) {
-     		normal.setItem(54, colorform.Next());
+     		normal.setItem(53, colorform.Next());
      	}
          
      	normal.setItem(45, colorform.Prev());
-     	
-     	for(int i= 10; i<43; i++) {
-     		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-     			continue;
-     		}
-     		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-     			continue;
-     		}
-     		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-     			continue;
-     		}
-     		
+
+     	for(int i= 0; i<28; i++) {
+     		cda.remove(0);
+     	}
+     	for(int i= 10; i<44; i++) {
      		if(cda.isEmpty()) {
      			break;
+     		} else {
+         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+         			continue;
+         		}
+         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+         			continue;
+         		}
+         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+         			continue;
+         		}
+         		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+         		cda.remove(0);
      		}
-     		
-     		normal.setItem(i, colorform.generateColorDisplay(cda.get(29)));
-     		cda.remove(0);
      	}
 		p.openInventory(normal);
     }
 	
     public static void openInventoryTree(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-     	Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 3");
-     	
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 3"+suffix);
      	for(int i=0; i<9; i++) {
      		normal.setItem(i, colorform.Panel());
      	}
@@ -148,36 +203,54 @@ public class utils {
      	}
      	
      	if(cda.size() > 84) {
-     		normal.setItem(54, colorform.Next());
+     		normal.setItem(53, colorform.Next());
      	}
      	
      	normal.setItem(45, colorform.Prev());
-     	
-     	for(int i= 10; i<43; i++) {
-     		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-     			continue;
-     		}
-     		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-     			continue;
-     		}
-     		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-     			continue;
-     		}
-     		
+
+     	for(int i= 0; i<56; i++) {
+     		cda.remove(0);
+     	}
+     	for(int i= 10; i<44; i++) {
      		if(cda.isEmpty()) {
      			break;
+     		} else {
+         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+         			continue;
+         		}
+         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+         			continue;
+         		}
+         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+         			continue;
+         		}
+         		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+         		cda.remove(0);
      		}
-     		
-     		normal.setItem(i, colorform.generateColorDisplay(cda.get(57)));
-     		cda.remove(0);
      	}
 		p.openInventory(normal);
     }
 
     public static void openInventoryFour(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-        	Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 4");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 4"+suffix);
         	
         	for(int i=0; i<9; i++) {
         		normal.setItem(i, colorform.Panel());
@@ -197,36 +270,55 @@ public class utils {
         	}
         	
         	if(cda.size() > 112) {
-        		normal.setItem(54, colorform.Next());
+        		normal.setItem(53, colorform.Next());
         	}
         	
         	normal.setItem(45, colorform.Prev());
-        	
-        	for(int i= 10; i<43; i++) {
-        		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-        			continue;
-        		}
-        		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-        			continue;
-        		}
-        		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-        			continue;
-        		}
-        		
-        		if(cda.isEmpty()) {
-        			break;
-        		}
-        		
-        		normal.setItem(i, colorform.generateColorDisplay(cda.get(85)));
-                cda.remove(0);
-            }
+
+         	for(int i= 0; i<84; i++) {
+         		cda.remove(0);
+         	}
+         	for(int i= 10; i<44; i++) {
+         		if(cda.isEmpty()) {
+         			break;
+         		} else {
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+             			continue;
+             		}
+             		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+             		cda.remove(0);
+         		}
+         	}
 			p.openInventory(normal);
         }
 
     public static void openInventoryFive(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-            Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 5");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 5"+suffix);
 
             for(int i=0; i<9; i++) {
             	normal.setItem(i, colorform.Panel());
@@ -246,36 +338,55 @@ public class utils {
             }
 
             if(cda.size() > 140) {
-            	normal.setItem(54, colorform.Next());
+            	normal.setItem(53, colorform.Next());
             }
 
             normal.setItem(45, colorform.Prev());
 
-            for(int i= 10; i<43; i++) {
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-            		continue;
-            	}
-            
-            	if(cda.isEmpty()) {
-            		break;
-            	}
-            
-            	normal.setItem(i, colorform.generateColorDisplay(cda.get(113)));
-                cda.remove(0);
-            }
+         	for(int i= 0; i<112; i++) {
+         		cda.remove(0);
+         	}
+         	for(int i= 10; i<44; i++) {
+         		if(cda.isEmpty()) {
+         			break;
+         		} else {
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+             			continue;
+             		}
+             		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+             		cda.remove(0);
+         		}
+         	}
 			p.openInventory(normal);
     }
 
     public static void openInventorySix(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-            Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 6");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 6"+suffix);
 
             for(int i=0; i<9; i++) {
             	normal.setItem(i, colorform.Panel());
@@ -295,36 +406,55 @@ public class utils {
             }
 
             if(cda.size() > 168) {
-            	normal.setItem(54, colorform.Next());
+            	normal.setItem(53, colorform.Next());
             }
 
             normal.setItem(45, colorform.Prev());
 
-            for(int i= 10; i<43; i++) {
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-            		continue;
-            	}
-            
-            	if(cda.isEmpty()) {
-            		break;
-            	}
-            
-            	normal.setItem(i, colorform.generateColorDisplay(cda.get(141)));
-                cda.remove(0);
-            }
+         	for(int i= 0; i<140; i++) {
+         		cda.remove(0);
+         	}
+         	for(int i= 10; i<44; i++) {
+         		if(cda.isEmpty()) {
+         			break;
+         		} else {
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+             			continue;
+             		}
+             		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+             		cda.remove(0);
+         		}
+         	}
 			p.openInventory(normal);
     }
 
     public static void openInventorySeven(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-            Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 7");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 7"+suffix);
 
             for(int i=0; i<9; i++) {
             	normal.setItem(i, colorform.Panel());
@@ -344,38 +474,56 @@ public class utils {
             }
 
             if(cda.size() > 196) {
-            	normal.setItem(54, colorform.Next());
+            	normal.setItem(53, colorform.Next());
             }
 
             normal.setItem(45, colorform.Prev());
 
-            for(int i= 10; i<43; i++) {
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-            		continue;
-            	}
-            
-            	if(cda.isEmpty()) {
-            		break;
-            	}
-            
-            	normal.setItem(i, colorform.generateColorDisplay(cda.get(169)));
-                cda.remove(0);
-            }
+         	for(int i= 0; i<168; i++) {
+         		cda.remove(0);
+         	}
+         	for(int i= 10; i<44; i++) {
+         		if(cda.isEmpty()) {
+         			break;
+         		} else {
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+             			continue;
+             		}
+             		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+             		cda.remove(0);
+         		}
+         	}
 
 			p.openInventory(normal);
     }
 
     public static void openInventoryEight(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-            Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 8");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
 
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 8"+suffix);
             for(int i=0; i<9; i++) {
             	normal.setItem(i, colorform.Panel());
             }
@@ -394,37 +542,56 @@ public class utils {
             }
 
             if(cda.size() > 224) {
-            	normal.setItem(54, colorform.Next());
+            	normal.setItem(53, colorform.Next());
             }
 
             normal.setItem(45, colorform.Prev());
 
-            for(int i= 10; i<43; i++) {
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-            		continue;
-            	}
-            
-            	if(cda.isEmpty()) {
-            		break;
-            	}
-            
-            	normal.setItem(i, colorform.generateColorDisplay(cda.get(197)));
-                cda.remove(0);
-            }
+         	for(int i= 0; i<196; i++) {
+         		cda.remove(0);
+         	}
+         	for(int i= 10; i<44; i++) {
+         		if(cda.isEmpty()) {
+         			break;
+         		} else {
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+             			continue;
+             		}
+             		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+             		cda.remove(0);
+         		}
+         	}
 			p.openInventory(normal);
 
     }
 
     public static void openInventoryNine(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-            Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 9");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 9"+suffix);
 
             for(int i=0; i<9; i++) {
             	normal.setItem(i, colorform.Panel());
@@ -444,29 +611,31 @@ public class utils {
             }
 
             if(cda.size() > 252) {
-            	normal.setItem(54, colorform.Next());
+            	normal.setItem(53, colorform.Next());
             }
 
             normal.setItem(45, colorform.Prev());
 
-            for(int i= 10; i<43; i++) {
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-            		continue;
-            	}
-            	if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-            		continue;
-            	}
-            
-            	if(cda.isEmpty()) {
-            		break;
-            	}
-            
-            	normal.setItem(i, colorform.generateColorDisplay(cda.get(225)));
-                cda.remove(0);
-            }
+         	for(int i= 0; i<224; i++) {
+         		cda.remove(0);
+         	}
+         	for(int i= 10; i<44; i++) {
+         		if(cda.isEmpty()) {
+         			break;
+         		} else {
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+             			continue;
+             		}
+             		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+             			continue;
+             		}
+             		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+             		cda.remove(0);
+         		}
+         	}
 			p.openInventory(normal);
 
 
@@ -474,8 +643,26 @@ public class utils {
 
     public static void openInventoryTen(Player p){
 		cda = colorform.codesl();
-		codes = colorform.codes();
-			Inventory normal = Bukkit.createInventory(null, 54, "Tintes - 10");
+		Inventory normal;
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+
+		String suffix = "";
+		String prefix = "";
+
+		if(conf.getString("config.inv-suffix") != null) {
+			suffix = conf.getString("config.inv-suffix");
+		}
+		if(conf.getString("config.inv-prefix") != null) {
+			suffix = conf.getString("config.inv-prefix");
+		}
+
+		normal = Bukkit.createInventory(null, 54, prefix+"Tintes - 10"+suffix);
+			
 
 			for(int i=0; i<9; i++) {
 				normal.setItem(i, colorform.Panel());
@@ -496,24 +683,26 @@ public class utils {
 
 			normal.setItem(45, colorform.Prev());
 
-			for(int i= 10; i<43; i++) {
-				if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
-					continue;
-				}
-				if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
-					continue;
-				}
-				if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
-					continue;
-				}
-			
-				if(cda.isEmpty()) {
-					break;
-				}
-			
-				normal.setItem(i, colorform.generateColorDisplay(cda.get(253)));
-				cda.remove(0);
-			}
+	     	for(int i= 0; i<252; i++) {
+	     		cda.remove(0);
+	     	}
+	     	for(int i= 10; i<44; i++) {
+	     		if(cda.isEmpty()) {
+	     			break;
+	     		} else {
+	         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Panel().getType())) {
+	         			continue;
+	         		}
+	         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Next().getType())) {
+	         			continue;
+	         		}
+	         		if(normal.getItem(i) != null && normal.getItem(i).getType().equals(colorform.Prev().getType())) {
+	         			continue;
+	         		}
+	         		normal.setItem(i, colorform.generateColorDisplay(cda.get(0), p));
+	         		cda.remove(0);
+	     		}
+	     	}
 
 			p.openInventory(normal);
 			

@@ -11,6 +11,8 @@ config:
    PREV-MATERIAL: EMERALD_BLOCK
    PREV-NAME: PREV
    PREV-CMD: 0
+   except:
+   - LEATHER_HELMET
 colors:
    red:
       display-name: "Rojo"

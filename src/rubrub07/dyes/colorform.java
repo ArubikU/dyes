@@ -12,16 +12,18 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.sonatype.inject.Nullable;
-
+import org.eclipse.jdt.annotation.Nullable;
 
 import io.lumine.mythic.lib.api.item.ItemTag;
 import io.lumine.mythic.lib.api.item.NBTItem;
+import io.lumine.mythic.lib.api.util.LegacyComponent;
+import io.lumine.mythic.lib.gson.Gson;
 
 public class colorform {
 
@@ -64,7 +66,7 @@ public class colorform {
 		color = Color.fromRGB(r, g, b);
 	}
 	
-	public static ItemStack generateColorDisplay(String code) {
+	public static ItemStack generateColorDisplay(String code, Player p) {
 
 		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
 		if (!f.exists()) {
@@ -76,8 +78,6 @@ public class colorform {
 		ItemStack i = new ItemStack(Material.getMaterial(conf.getString("config.MATERIAL")));
 		ItemMeta s = i.getItemMeta();
 		s.setCustomModelData(conf.getInt("config.CMD"));
-		s.setDisplayName(conf.getString("colors." + code + ".display-name"));
-		s.setLocalizedName(conf.getString("colors." + code + ".display-name"));
 			i.setItemMeta(s);
 		s = i.getItemMeta();
 		
@@ -103,9 +103,44 @@ public class colorform {
 		}
 		NBTItem is = NBTItem.get(i);
 		is.addTag(new ItemTag("color-code", code));
+		is.setDisplayNameComponent(LegacyComponent.parse(conf.getString("colors." + code + ".display-name")));
+		if(conf.getString("colors." + code + ".permission") != null) {
+			//if()
+		}
+		
 		
 		i = is.toItem();
 		return i;
+	}
+	
+	public static boolean hasPermission(Player p, colorform c) {
+
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+		
+		if(conf.getString("colors." + c.code + ".permission") != null) {
+			if(p.hasPermission(conf.getString("colors." + c.code + ".permission")) || p.isOp()) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return true;
+		}
+	}
+	@Nullable
+	public String getDisplayName() {
+		File f = new File(dyes.getPlugin().getDataFolder(), "config.yml");
+		if (!f.exists()) {
+			f.getParentFile().mkdirs();
+		}
+		
+		FileConfiguration conf = YamlConfiguration.loadConfiguration(f);
+		return conf.getString("colors." + code + ".display-name");
 	}
 	
 	public static ItemStack Panel() {
@@ -154,9 +189,9 @@ public class colorform {
 
 		i.setItemMeta(s);
 		NBTItem is = NBTItem.get(i);
+		is.setDisplayNameComponent(LegacyComponent.parse(conf.getString("config.NEXT-NAME")));
 		is.addTag(new ItemTag("type", "next"));
-		
-		i = is.getItem();
+		i = is.toItem();
 		return i;
 	}
 	
@@ -181,9 +216,10 @@ public class colorform {
 		s.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		i.setItemMeta(s);
 		NBTItem is = NBTItem.get(i);
+		is.setDisplayNameComponent(LegacyComponent.parse(conf.getString("config.PREV-NAME")));
 		is.addTag(new ItemTag("type", "prev"));
 		
-		i = is.getItem();
+		i = is.toItem();
 		return i;
 	}
 	
